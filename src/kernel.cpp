@@ -1,6 +1,5 @@
 #include "drivers/vga.h"
 #include "drivers/keyboard.h"
-#include "menu.h"
 
 extern "C" void main() {
     clear_screen();
