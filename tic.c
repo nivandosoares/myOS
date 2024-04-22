@@ -96,32 +96,32 @@ void draw_game_board()
   draw_box(BOX_SINGLELINE, 0, 2, 18, 3, GREY, BLACK);
 
   gotoxy(0, 0);
-  print_color_string("Tic-Tac-Toe", YELLOW, BLACK);
+  print_color_string("jogo da velha", YELLOW, BLACK);
 
   gotoxy(1, 3);
-  print_color_string("Player 1 Moves: ", BRIGHT_RED, BLACK);
+  print_color_string("VEZ DO JOGADOR 1: ", BRIGHT_RED, BLACK);
   print_int(player_1_moves);
 
   gotoxy(1, 5);
-  print_color_string("Player 2 Moves: ", BRIGHT_BLUE, BLACK);
+  print_color_string("VEZ DO JOGADOR 2: ", BRIGHT_BLUE, BLACK);
   print_int(player_2_moves);
 
   gotoxy(1, 7);
-  print_color_string("Turn: ", CYAN, BLACK);
+  print_color_string("VEZ: ", CYAN, BLACK);
   gotoxy(8, 7);
   if(turn == PLAYER_1){
-    print_color_string("Player 1", BRIGHT_CYAN, BLACK);
+    print_color_string("JOGADOR 1", BRIGHT_CYAN, BLACK);
   }else{
-    print_color_string("Player 2", BRIGHT_CYAN, BLACK);
+    print_color_string("JOGADOR 2", BRIGHT_CYAN, BLACK);
   }
 
   draw_box(BOX_SINGLELINE, 0, 9, 18, 8, GREY, BLACK);
 
   gotoxy(1, 9);
-  print_color_string("Keys", WHITE, BLACK);
+  print_color_string("TECLAS", WHITE, BLACK);
 
   gotoxy(1, 11);
-  print_color_string("Arrows", WHITE, BLACK);
+  print_color_string("SETAS", WHITE, BLACK);
 
   gotoxy(12, 10);
   print_char(30);
@@ -135,59 +135,59 @@ void draw_game_board()
   gotoxy(12, 12);
   print_char(31);
 
-  gotoxy(1, 14);
-  print_color_string("Spacebar to Select", WHITE, BLACK);
+  gotoxy(2, 14);
+  print_color_string("USE ESPACO PARA MARCAR", WHITE, BLACK);
   gotoxy(1, 16);
-  print_color_string("Mov White Box", GREY, BLACK);
+  print_color_string("MOVA O QUADRADO BRANCO", GREY, BLACK);
   gotoxy(1, 17);
-  print_color_string(" to select cell", GREY, BLACK);
+  print_color_string(" PARA SELECIONAR O LOCAL", GREY, BLACK);
 
   if(error == TRUE){
     gotoxy(1, 20);
-    print_color_string("Cell is already selected", RED, BLACK);
+    print_color_string("JA SELECIONADO", RED, BLACK);
     error = FALSE;
   }
 }
 
-int get_winner()
-{
-  int winner = 0;
-  int i;
-  //each row
-  for(i = 0; i < 3; i++){
-    if((grid[i][0] & grid[i][1] & grid[i][2]) == PLAYER_1){
-      winner = PLAYER_1;
-      break;
-    }else if((grid[i][0] & grid[i][1] & grid[i][2]) == PLAYER_2){
-      winner = PLAYER_2;
-      break;
-    }
-  }
-  //each column
-  if(winner == 0){
-    for(i = 0; i < 3; i++){
-      if((grid[0][i] & grid[1][i] & grid[2][i]) == PLAYER_1){
-        winner = PLAYER_1;
-        break;
-      }else if((grid[0][i] & grid[1][i] & grid[2][i]) == PLAYER_2){
-        winner = PLAYER_2;
-        break;
-      }
-    }
-  }
+int get_winner() {
+    int i, j;
+    int total_moves = 0;
 
-  if(winner == 0){
-    if((grid[0][0] & grid[1][1] & grid[2][2]) == PLAYER_1)
-      winner = PLAYER_1;
-    else if((grid[0][0] & grid[1][1] & grid[2][2]) == PLAYER_2)
-      winner = PLAYER_2;
-    if((grid[2][0] & grid[1][1] & grid[0][2]) == PLAYER_1)
-      winner = PLAYER_1;
-    else if((grid[2][0] & grid[1][1] & grid[0][2]) == PLAYER_2)
-      winner = PLAYER_2;
-  }
+    // Verifica todas as linhas, colunas e diagonais para um vencedor
+    for (i = 0; i < 3; i++) {
+        // Verifica linhas
+        if ((grid[i][0] == grid[i][1] && grid[i][1] == grid[i][2]) && grid[i][0] != 0) {
+            return grid[i][0];
+        }
+        // Verifica colunas
+        if ((grid[0][i] == grid[1][i] && grid[1][i] == grid[2][i]) && grid[0][i] != 0) {
+            return grid[0][i];
+        }
+    }
 
-  return winner;
+    // Verifica diagonais
+    if ((grid[0][0] == grid[1][1] && grid[1][1] == grid[2][2]) && grid[0][0] != 0) {
+        return grid[0][0];
+    }
+    if ((grid[2][0] == grid[1][1] && grid[1][1] == grid[0][2]) && grid[2][0] != 0) {
+        return grid[2][0];
+    }
+
+    // Conta o número de movimentos para determinar se o tabuleiro está cheio
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            if (grid[i][j] != 0) {
+                total_moves++;
+            }
+        }
+    }
+
+    // Se o total de movimentos for 9 e não houver vencedor, é empate
+    if (total_moves == 9) {
+        return -1;  // Código para empate, pode ajustar conforme necessário
+    }
+
+    return 0;  // Retorna 0 se não houver vencedor ainda e ainda existem movimentos possíveis
 }
 
 void restore_game_data_to_default()
@@ -273,15 +273,15 @@ void launch_game()
       if(get_winner() == PLAYER_1){
         draw_box(BOX_DOUBLELINE, 3, 20, 16, 1, BRIGHT_GREEN, BLACK);
         gotoxy(6, 21);
-        print_color_string("Player 1 Wins", BRIGHT_GREEN, BLACK);
+        print_color_string("JOGADOR 1 VENCEU", BRIGHT_GREEN, BLACK);
       }else if(get_winner() == PLAYER_2){
         draw_box(BOX_DOUBLELINE, 3, 20, 16, 1, BRIGHT_GREEN, BLACK);
         gotoxy(6, 21);
-        print_color_string("Player 2 Wins", BRIGHT_GREEN, BLACK);
+        print_color_string("JOGADOR  2 VENCEU", BRIGHT_GREEN, BLACK);
       }else{
         draw_box(BOX_DOUBLELINE, 3, 20, 16, 1, CYAN, BLACK);
         gotoxy(6, 21);
-        print_color_string("No one Wins", BRIGHT_CYAN, BLACK);
+        print_color_string("NINGUEM VENCE", BRIGHT_CYAN, BLACK);
       }
     }
     if(player_1_moves + player_2_moves == 9)
